@@ -40,9 +40,6 @@ ATOR: Cliente em potencial / Visitante
                     <li class="nav-item"><a class="nav-link active" href="#inicio">Início</a></li>
                     <li class="nav-item"><a class="nav-link" href="#quem-somos">Quem Somos</a></li>
                     <li class="nav-item"><a class="nav-link" href="#servicos">O Que Vendemos</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalContato">Entre em Contato</a>
-                    </li>
                 </ul>
                 <div>
                     <button type="button" class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal" data-bs-target="#modalOrcamento">Solicitar Orçamento</button>
@@ -482,6 +479,7 @@ ATOR: Cliente em potencial / Visitante
                 </div>
             </div>
         </div>
+        
     </div>
 
     <!-- Bootstrap JS Bundle com Popper -->
