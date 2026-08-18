@@ -1,0 +1,66 @@
+/* Arquivo: index_style.css
+   Descrição: Estilos personalizados para a página inicial do OTRS (modelo)
+*/
+
+#inicio {
+  background-color: #2851a3 !important;
+}
+
+:root {
+  --brand-primary: #2851a3;
+  --bs-primary: #2851a3;
+  --bs-primary-rgb: 40, 81, 163;
+  --bs-primary-text-emphasis: #2851a3;
+  --bs-primary-bg-subtle: #d9e1f2;
+  --bs-primary-border-subtle: #b3c0df;
+  --bs-link-color: #2851a3;
+  --bs-link-hover-color: #204283;
+  --muted: #6c757d;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* Hero */
+.hero {
+  background-image: linear-gradient(
+    90deg,
+    rgba(40, 81, 163, 0.06),
+    rgba(40, 81, 163, 0.01)
+  );
+  border-radius: 8px;
+}
+
+/* Serviços */
+.service-card .card-body {
+  padding: 1.25rem;
+}
+.service-card .bi {
+  font-size: 2.1rem;
+}
+
+/* Consulta rápida */
+.search-quick .input-group .form-control {
+  min-width: 380px;
+}
+
+/* Footer */
+footer {
+  font-size: 0.9rem;
+}
+
+/* Pequenos ajustes responsivos */
+@media (max-width: 576px) {
+  .search-quick .input-group .form-control {
+    min-width: 180px;
+  }
+}

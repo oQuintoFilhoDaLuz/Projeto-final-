@@ -1,0 +1,4 @@
+/* Estilo do contexto de orçamento para o modal */
+#modalOrcamento .modal-content {
+  border-top: 5px solid #198754;
+}
