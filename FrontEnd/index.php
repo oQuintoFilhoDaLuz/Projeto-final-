@@ -42,7 +42,7 @@ ATOR: Cliente em potencial / Visitante
                     <li class="nav-item"><a class="nav-link" href="#servicos">O Que Vendemos</a></li>
                 </ul>
                 <div>
-                    <button type="button" class="btn btn-outline-light btn-sm me-2" data-bs-toggle="modal" data-bs-target="#modalOrcamento">Solicitar Orçamento</button>
+                    <button type="button" class="btn btn-outline-light btn-sm me-2" id="btnAbrirOrcamentoTopo">Solicitar Orçamento</button>
                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalLogin">Área do Cliente</button>
                 </div>
             </div>
@@ -277,33 +277,145 @@ ATOR: Cliente em potencial / Visitante
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalOrcamentoLabel">Solicitar Orçamento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    <h5 class="modal-title" id="modalOrcamentoLabel">Solicitar Orçamento OTRS</h5>
+                    <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Fechar">&times;</button>
                 </div>
 
-                <div class="modal-body">
-                    <form id="formOrcamento" action="../BackEnd/processar_orcamento.php" method="POST">
-                        <div class="mb-3">
-                            <label for="nome" class="form-label">Nome Completo</label>
-                            <input type="text" class="form-control" id="nome" name="nome" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label">E-mail</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="descricao" class="form-label">Descrição do Serviço / Necessidade</label>
-                            <textarea class="form-control" id="descricao" name="descricao" rows="4" required></textarea>
-                        </div>
-
-                        <div class="modal-footer px-0 pb-0">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-success">Enviar Solicitação</button>
-                        </div>
-                    </form>
+                <div class="steps-nav">
+                    <div class="step-tab active" id="tab-1">1. Requisitante</div>
+                    <div class="step-tab" id="tab-2">2. Empresa</div>
+                    <div class="step-tab" id="tab-3">3. Necessidades</div>
                 </div>
+
+                <form id="formOrcamento" action="../BackEnd/processar_orcamento.php" method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" id="descricao" name="descricao">
+
+                        <div class="step-content active" id="step-1">
+                            <div class="form-group">
+                                <label for="nome">Nome Completo *</label>
+                                <input type="text" id="nome" name="nome" class="form-control" placeholder="Ex.: João Silva" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cargo">Seu Cargo na Empresa *</label>
+                                <input type="text" id="cargo" name="cargo" class="form-control" placeholder="Ex.: Diretor de TI, Gerente de Operações..." required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">E-mail Corporativo *</label>
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="joao@suaempresa.com.br" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="telefone">WhatsApp / Telefone *</label>
+                                    <input type="tel" id="telefone" name="telefone" class="form-control" placeholder="(11) 99999-9999" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-content" id="step-2">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="empresa">Nome / Razão Social *</label>
+                                    <input type="text" id="empresa" name="empresa" class="form-control" placeholder="Nome da empresa" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cnpj">CNPJ (Opcional)</label>
+                                    <input type="text" id="cnpj" name="cnpj" class="form-control" placeholder="00.000.000/0001-00">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="segmento">Segmento de Atuação</label>
+                                    <select id="segmento" name="segmento" class="form-control">
+                                        <option value="">Selecione...</option>
+                                        <option value="tecnologia">Tecnologia / TI</option>
+                                        <option value="saude">Saúde</option>
+                                        <option value="servicos">Serviços</option>
+                                        <option value="industria">Indústria</option>
+                                        <option value="outro">Outro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="porte">Tamanho da Empresa</label>
+                                    <select id="porte" name="porte" class="form-control">
+                                        <option value="">Selecione...</option>
+                                        <option value="1-20">1 a 20 colaboradores</option>
+                                        <option value="21-100">21 a 100 colaboradores</option>
+                                        <option value="101-500">101 a 500 colaboradores</option>
+                                        <option value="+500">Mais de 500 colaboradores</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-content" id="step-3">
+                            <div id="technicalSection" class="technical-section">
+                                <div class="form-group">
+                                    <label>Quais serviços você necessita? (Pode marcar mais de um)</label>
+                                    <div class="cards-grid">
+                                        <label class="card-option">
+                                            <input type="checkbox" name="servicos[]" value="implantacao">
+                                            <span class="card-title">Nova Implantação</span>
+                                            <span class="card-desc">Implantar e configurar o OTRS do zero.</span>
+                                        </label>
+                                        <label class="card-option">
+                                            <input type="checkbox" name="servicos[]" value="migracao">
+                                            <span class="card-title">Migração / Atualização</span>
+                                            <span class="card-desc">Atualizar versão do OTRS existente.</span>
+                                        </label>
+                                        <label class="card-option">
+                                            <input type="checkbox" name="servicos[]" value="suporte">
+                                            <span class="card-title">Sustentação e Suporte</span>
+                                            <span class="card-desc">Contrato mensal de suporte técnico.</span>
+                                        </label>
+                                        <label class="card-option">
+                                            <input type="checkbox" name="servicos[]" value="customizacao">
+                                            <span class="card-title">Customização / Layout</span>
+                                            <span class="card-desc">Ajuste de telas, temas e fluxos.</span>
+                                        </label>
+                                        <label class="card-option">
+                                            <input type="checkbox" name="servicos[]" value="treinamento">
+                                            <span class="card-title">Treinamento</span>
+                                            <span class="card-desc">Capacitação para equipe e agentes.</span>
+                                        </label>
+                                        <label class="card-option">
+                                            <input type="checkbox" name="servicos[]" value="integracao">
+                                            <span class="card-title">Integrações (API)</span>
+                                            <span class="card-desc">Conectar OTRS com ERP/CRM/Outros.</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="agentes">Estimativa de Agentes (Atendentes no sistema):</label>
+                                    <select id="agentes" name="agentes" class="form-control">
+                                        <option value="1-5">1 a 5 agentes</option>
+                                        <option value="6-15">6 a 15 agentes</option>
+                                        <option value="16-50">16 a 50 agentes</option>
+                                        <option value="+50">Mais de 50 agentes</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <label class="consulting-card">
+                                <input type="checkbox" id="needConsulting" name="needConsulting" value="1">
+                                <div>
+                                    <div class="consulting-card-title">Nao tenho conhecimento tecnico suficiente / Quero uma consultoria</div>
+                                    <div class="consulting-card-desc">Marque esta opção se prefere que nosso especialista faça uma reunião de diagnóstico para entender suas necessidades.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="footer-actions">
+                            <button type="button" class="btn btn-secondary" id="btnPrev" style="display: none;">Voltar</button>
+                            <div style="flex: 1;"></div>
+                            <button type="button" class="btn btn-primary" id="btnNext">Avançar</button>
+                            <button type="submit" class="btn btn-primary" id="btnSubmit" style="display: none;">Enviar Solicitação</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -418,7 +530,7 @@ ATOR: Cliente em potencial / Visitante
             </div>
             <div class="modal-footer bg-light">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalOrcamento">Quero ser um Cliente</button>
+                <button type="button" class="btn btn-primary" id="btnAbrirOrcamentoCliente">Seja nosso cliente</button>
             </div>
         </div>
     </div>
@@ -484,5 +596,217 @@ ATOR: Cliente em potencial / Visitante
 
     <!-- Bootstrap JS Bundle com Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function () {
+            const modalOrcamentoElement = document.getElementById("modalOrcamento");
+            const btnAbrirOrcamentoTopo = document.getElementById("btnAbrirOrcamentoTopo");
+            const btnAbrirOrcamentoCliente = document.getElementById("btnAbrirOrcamentoCliente");
+            let modalOrcamentoInstance = null;
+
+            function getModalOrcamentoInstance() {
+                if (!modalOrcamentoElement || typeof bootstrap === "undefined") {
+                    return null;
+                }
+
+                if (!modalOrcamentoInstance) {
+                    modalOrcamentoInstance = bootstrap.Modal.getOrCreateInstance(modalOrcamentoElement, {
+                        backdrop: true,
+                        keyboard: true,
+                        focus: true
+                    });
+                }
+
+                return modalOrcamentoInstance;
+            }
+
+            function openModal() {
+                const modalInstance = getModalOrcamentoInstance();
+                if (modalInstance) {
+                    modalInstance.show();
+                }
+            }
+
+            function closeModal() {
+                const modalInstance = getModalOrcamentoInstance();
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            }
+
+            function bindOpenModalButton(buttonElement) {
+                if (!buttonElement) {
+                    return;
+                }
+
+                buttonElement.addEventListener("click", function () {
+                    if (typeof bootstrap === "undefined") {
+                        return;
+                    }
+
+                    const parentModalElement = buttonElement.closest(".modal");
+                    if (!parentModalElement || !parentModalElement.classList.contains("show")) {
+                        openModal();
+                        return;
+                    }
+
+                    const parentModalInstance = bootstrap.Modal.getInstance(parentModalElement);
+                    if (!parentModalInstance) {
+                        openModal();
+                        return;
+                    }
+
+                    parentModalElement.addEventListener("hidden.bs.modal", openModal, { once: true });
+                    parentModalInstance.hide();
+                });
+            }
+
+            bindOpenModalButton(btnAbrirOrcamentoTopo);
+            bindOpenModalButton(btnAbrirOrcamentoCliente);
+            window.openModal = openModal;
+            window.closeModal = closeModal;
+
+            if (modalOrcamentoElement) {
+                modalOrcamentoElement.addEventListener("click", function (event) {
+                    if (event.target === modalOrcamentoElement) {
+                        closeModal();
+                    }
+                });
+            }
+
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape" && modalOrcamentoElement && modalOrcamentoElement.classList.contains("show")) {
+                    closeModal();
+                }
+            });
+
+            const quoteForm = document.getElementById("formOrcamento");
+            if (!quoteForm) {
+                return;
+            }
+
+            const totalSteps = 3;
+            let currentStep = 1;
+            const btnPrev = document.getElementById("btnPrev");
+            const btnNext = document.getElementById("btnNext");
+            const btnSubmit = document.getElementById("btnSubmit");
+            const consultingToggle = document.getElementById("needConsulting");
+            const technicalSection = document.getElementById("technicalSection");
+            const descricaoInput = document.getElementById("descricao");
+            const serviceCheckboxes = quoteForm.querySelectorAll('input[name="servicos[]"]');
+
+            function updateFooterButtons() {
+                btnPrev.style.display = currentStep === 1 ? "none" : "inline-block";
+                btnNext.style.display = currentStep === totalSteps ? "none" : "inline-block";
+                btnSubmit.style.display = currentStep === totalSteps ? "inline-block" : "none";
+            }
+
+            function showStep(stepNumber) {
+                for (let step = 1; step <= totalSteps; step += 1) {
+                    const stepContent = document.getElementById("step-" + step);
+                    const stepTab = document.getElementById("tab-" + step);
+                    if (stepContent && stepTab) {
+                        const isActive = step === stepNumber;
+                        stepContent.classList.toggle("active", isActive);
+                        stepTab.classList.toggle("active", isActive);
+                    }
+                }
+
+                currentStep = stepNumber;
+                updateFooterButtons();
+            }
+
+            function validateCurrentStep() {
+                const currentStepElement = document.getElementById("step-" + currentStep);
+                if (!currentStepElement) {
+                    return true;
+                }
+
+                const fields = currentStepElement.querySelectorAll("input, select, textarea");
+                for (let i = 0; i < fields.length; i += 1) {
+                    if (!fields[i].checkValidity()) {
+                        fields[i].reportValidity();
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            function updateSelectedCards() {
+                for (let i = 0; i < serviceCheckboxes.length; i += 1) {
+                    const card = serviceCheckboxes[i].closest(".card-option");
+                    if (card) {
+                        card.classList.toggle("selected", serviceCheckboxes[i].checked);
+                    }
+                }
+            }
+
+            function handleConsultingSection() {
+                if (!consultingToggle || !technicalSection) {
+                    return;
+                }
+
+                const disableTechnicalSection = consultingToggle.checked;
+                technicalSection.classList.toggle("disabled", disableTechnicalSection);
+                const technicalFields = technicalSection.querySelectorAll("input, select, textarea");
+                for (let i = 0; i < technicalFields.length; i += 1) {
+                    technicalFields[i].disabled = disableTechnicalSection;
+                }
+            }
+
+            function fillDescriptionSummary() {
+                const services = [];
+                for (let i = 0; i < serviceCheckboxes.length; i += 1) {
+                    if (serviceCheckboxes[i].checked) {
+                        services.push(serviceCheckboxes[i].value);
+                    }
+                }
+
+                const summary = [
+                    "Servicos: " + (services.length ? services.join(", ") : "nao informado"),
+                    "Consultoria: " + (consultingToggle && consultingToggle.checked ? "sim" : "nao"),
+                    "Agentes: " + (document.getElementById("agentes").value || "nao informado"),
+                    "Cargo: " + (document.getElementById("cargo").value || "nao informado"),
+                    "Empresa: " + (document.getElementById("empresa").value || "nao informado")
+                ];
+                descricaoInput.value = summary.join(" | ");
+            }
+
+            if (btnNext) {
+                btnNext.addEventListener("click", function () {
+                    if (!validateCurrentStep()) {
+                        return;
+                    }
+                    if (currentStep < totalSteps) {
+                        showStep(currentStep + 1);
+                    }
+                });
+            }
+
+            if (btnPrev) {
+                btnPrev.addEventListener("click", function () {
+                    if (currentStep > 1) {
+                        showStep(currentStep - 1);
+                    }
+                });
+            }
+
+            for (let i = 0; i < serviceCheckboxes.length; i += 1) {
+                serviceCheckboxes[i].addEventListener("change", updateSelectedCards);
+            }
+
+            if (consultingToggle) {
+                consultingToggle.addEventListener("change", handleConsultingSection);
+            }
+
+            quoteForm.addEventListener("submit", function () {
+                fillDescriptionSummary();
+            });
+
+            showStep(1);
+            updateSelectedCards();
+            handleConsultingSection();
+        }());
+    </script>
 </body>
 </html>
