@@ -27,3 +27,7 @@
 
 - **Branches:** Padrão `agents/<nome-da-funcionalidade>`.
 - **Commits:** Mensagens objetivas e em português.
+- **Skills Locais (`.claude/skills/`):**
+  - `php-linter.md`: Validação de sintaxe PHP (`php -l`).
+  - `otrs-schema.md`: Consulta e validação das tabelas do banco OTRS.
+  - `architecture-check.md`: Garantia da separação de camadas e bloqueio de novas pastas.
